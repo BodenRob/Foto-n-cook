@@ -3,9 +3,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, onSnapshot, collection, deleteDoc, query, getDocs, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 
-// **HINWEIS**: Liest die Konfiguration aus den Vercel Umgebungsvariablen
+// **HINWEIS**: Liest die Konfiguration aus den Vercel Umgebungsvariablen.
+// Dieser Code wird in der Vorschau hier einen Fehler anzeigen, das ist normal.
+// Er funktioniert nur in der veröffentlichten App auf Vercel.
 const firebaseConfig = process.env.REACT_APP_FIREBASE_CONFIG ? JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG) : {};
 const appId = firebaseConfig.projectId || 'default-app-id';
+const geminiApiKey = process.env.REACT_APP_GEMINI_API_KEY || "";
 
 // Liste gängiger Vorratsartikel
 const COMMON_PANTRY_ITEMS = [
@@ -70,7 +73,6 @@ export default function App() {
   const [cookbookView, setCookbookView] = useState('recipes');
 
   // === API KEYS UND KONSTANTEN ===
-  const geminiApiKey = ""; // For Gemini API calls
   const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
   const imageUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${geminiApiKey}`;
 
