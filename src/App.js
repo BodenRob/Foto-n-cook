@@ -3,9 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, setDoc, onSnapshot, collection, deleteDoc, query, getDocs, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 
-// **HINWEIS**: Liest die Konfiguration aus den Vercel Umgebungsvariablen.
-// Dieser Code wird in der Vorschau hier einen Fehler anzeigen, das ist normal.
-// Er funktioniert nur in der veröffentlichten App auf Vercel.
+// **HINWEIS**: Liest die Konfiguration aus den Vercel Umgebungsvariablen
 const firebaseConfig = process.env.REACT_APP_FIREBASE_CONFIG ? JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG) : {};
 const appId = firebaseConfig.projectId || 'default-app-id';
 const geminiApiKey = process.env.REACT_APP_GEMINI_API_KEY || "";
@@ -467,7 +465,7 @@ export default function App() {
                         <label key={item} className="flex items-center space-x-2 cursor-pointer hover:text-orange-600">
                             <input
                                 type="checkbox"
-                                checked={userData.pantry.includes(item)}
+                                checked={(userData.pantry || []).includes(item)}
                                 onChange={() => togglePantryItem(item)}
                                 className="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                             />
@@ -626,7 +624,7 @@ export default function App() {
                 )}
                 {selectedRecipe.steps && selectedRecipe.steps.map((step, index) => (
                   <div key={index} className="flex flex-col sm:flex-row gap-6 p-4 border border-amber-200 rounded-xl bg-amber-50/50">
-                    <div className="flex-shrink-0 sm:w-1/3">
+                    <div className="flex-shrink-0 sm:w-1-3">
                       {step.imageLoading ? ( <div className="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center animate-pulse"><svg className="w-10 h-10 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div> ) : step.imageUrl ? ( <img src={step.imageUrl} alt={`Schritt ${index + 1}`} className="w-full h-full object-cover rounded-lg shadow-sm" /> ) : ( <div className="w-full aspect-video bg-red-100 rounded-lg flex items-center justify-center text-red-500"><p className="text-sm">Bildfehler</p></div> )}
                     </div>
                     <div className="flex-grow"> <h3 className="text-xl font-bold text-orange-600">Schritt {index + 1}</h3> <p className="mt-2 text-stone-700 leading-relaxed">{step.instruction}</p> </div>
